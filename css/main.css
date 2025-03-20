@@ -15,6 +15,7 @@
   --team-box-color: #151d20;
 }
 
+
 button {
   transition: all 0.3s;
 }
@@ -79,6 +80,12 @@ button {
   font-size: 15px;
   color: #fff;
   transition: all 0.3s;
+}
+
+button-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .download-link:hover {
