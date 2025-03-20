@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./css/loader.css">
+    
   
     <link
       href="css/bootstrap.min.css"
@@ -49,10 +50,12 @@
           <li class="nav-item">
           <a class="nav-link" href="delete.html">Delete </a>
           </li>
-
           <li class="nav-item">
             <a class="nav-link active" href="admin.html">Admin</a>
-            </li>         
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="approve.html">Approve Document</a>
+          </li>           
       </ul>
 
       <div class="d-flex">
@@ -90,7 +93,12 @@
           </div>
         
           <div data-aos="zoom-in" class="col-lg-6 py-3 data-upload my-3 mx-md-2">
-            <input   id="Exporter-address" type="text"  placeholder="Exporter Address"  required/>
+            <input
+            id="Exporter-address" 
+            type="text"  
+            placeholder="Exporter Address"  
+            required/>
+            
             <input  
               type="text" 
               id="info"
@@ -125,12 +133,74 @@
                 id="edit"
               />
             </div>
-           
           </div>
-          
- 
-        </div>
-      </div>
+          <!-- Add new admin -->
+          <div data-aos="zoom-in" class="col-lg-6 py-3 data-upload my-3 mx-md-2">
+            <h3 class="mb-3" style="color: #16bffd;">Assign a New Admin</h3>
+              <input
+                type="text"
+                id="newAdminAddress"
+                placeholder="Enter new admin wallet address"
+                required
+              />
+              <div id="adminNote" class="mt-2"></div>
+              <button class="btn btn-primary  exporter-button main-button w-100" id="createAdminBtn">Assign Admin</button>
+            </div>
+
+                  <!-- Assign a New Verifier -->
+<div data-aos="zoom-in" class="col-lg-6 py-3 data-upload my-3 mx-md-2">
+  <h3 class="mb-3" style="color: #16bffd;">Assign a New Verifier</h3>
+  <input
+    type="text"
+    id="verifierAddress"
+    placeholder="Enter new verifier wallet address"
+    required
+    class="form-control mb-2"
+  />
+  <div id="verifierNote" class="mt-2"></div>
+  <button
+    class="btn btn-primary exporter-button main-button w-100"
+    id="assignVerifierBtn"
+  >
+    Add Verifier
+  </button>
+</div>
+
+<script>
+  // Listen for button click
+  document.getElementById("assignVerifierBtn").addEventListener("click", async () => {
+    const verifierAddress = document.getElementById("verifierAddress").value;
+
+    // Basic validation
+    if (!verifierAddress || !verifierAddress.startsWith("0x") || verifierAddress.length !== 42) {
+      document.getElementById("verifierNote").innerHTML = 
+        "<h5 class='text-danger'>Please enter a valid wallet address.</h5>";
+      return;
+    }
+
+    try {
+      // Call the contract function to add a verifier for the current exporter
+      await window.contract.methods.addVerifierForExporter(verifierAddress)
+        .send({ from: window.userAddress })
+        .on("transactionHash", () => {
+          document.getElementById("verifierNote").innerHTML = 
+            "<h5 class='text-info'>Transaction sent... waiting for confirmation.</h5>";
+        })
+        .on("receipt", () => {
+          document.getElementById("verifierNote").innerHTML = 
+            "<h5 class='text-success'>Verifier assigned successfully!</h5>";
+        })
+        .on("error", (error) => {
+          document.getElementById("verifierNote").innerHTML = 
+            "<h5 class='text-danger'>Error: " + error.message + "</h5>";
+        });
+    } catch (err) {
+      document.getElementById("verifierNote").innerHTML = 
+        "<h5 class='text-danger'>Error: " + err.message + "</h5>";
+    }
+  });
+</script>
+    </div>
     <!--=====================Footer===========================-->
     <div class="footer-dark">
       <footer>

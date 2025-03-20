@@ -141,7 +141,7 @@
       <!-- Transaction information -->
       <div
         data-aos="zoom-in"
-        class="box gx-0 my-3 row mx-md-2 transaction-status col-lg"
+        class="box gx-0 my-3 row mx-md-2  transaction-status col-lg"
       >
         <div class="left col-md-6 p-3 d-flex flex-column">
           <span class="p-2 info" id="transaction-hash"></span>
@@ -189,12 +189,13 @@
         <br />
         <i class="fa-solid fa-caret-down"></i>
       </h5>
-
       <div class="loading-tx d-none text-center">
         <img src="./files/tx-loading.svg" alt="" />
       </div>
-      <div class="transactions row gy-2 gx-5 justify-content-center p-4"></div>
+      <div class="transactions row gy-2 gx-5 justify-content-center p-4"><a></a></div>
     </div>
+
+
     <!-- footer -->
     <div class="container">
       <footer class="footer-dark">
@@ -219,5 +220,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/aos.js"></script>
     <script src="./js/script.js"></script>
+    <!-- Add the QRCode library (make sure qrcode.min.js is in your project or use a CDN) -->
+    <script src="qrcode.min.js"></script>
+    <!-- Your main script, which references the QRCode library -->
+    <script src="App.js"></script>
+
   </body>
 </html>

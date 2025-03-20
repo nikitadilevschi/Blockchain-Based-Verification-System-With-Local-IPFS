@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Approve Documents</title>
+  <link rel="stylesheet" href="./css/loader.css" />
+  <link href="./css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Load Web3 and your App.js -->
+  <script src="node_modules/web3/dist/web3.min.js"></script>
+  <script src="js/App.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link href="./css/aos.min.css" rel="stylesheet" />
+  <link rel="icon" href="./assets/images/icon.png" />
+</head>
+
+<body>
+  <!-- Loading Spinner -->
+  <div class="loader-wraper">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="fa-solid fa-graduation-cap home_text"></i>
+        <span class="home_text">Secure</span>Docs
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="upload.html">Upload</a></li>
+          <li class="nav-item"><a class="nav-link" href="verify.html">Verify</a></li>
+          <li class="nav-item"><a class="nav-link" href="delete.html">Delete</a></li>
+          <li class="nav-item"><a class="nav-link" href="admin.html">Admin</a></li>
+          <li class="nav-item"><a class="nav-link active" href="approve.html">Approve Docs</a></li>
+        </ul>
+        <div class="d-flex">
+          <button id="loginButton" onclick="connect()" class="btn main-button">Login</button>
+          <button id="logoutButton" onclick="disconnect()" class="btn main-button">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container my-4">
+    <h3 class="text-center mb-4">Documents Pending Approval</h3>
+    <div id="pendingDocs" class="row justify-content-center">
+      <!-- Cards for each pending doc will be inserted here -->
+    </div>
+    <div id="approvalNote" class="mt-3 text-center text-info"></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="container">
+    <footer class="footer-dark">
+      <div class="row">
+        <div class="col-md-6 item text">
+          <h3><i class="fa-solid fa-graduation-cap"></i> SecureDocs</h3>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <i onclick="topFunction()" id="scroll-btn" class="fa-solid fa-angle-up"></i>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./js/aos.js"></script>
+  <script src="./js/script.js"></script>
+
+  <script>
+    window.addEventListener("load", async () => {
+      if (typeof window.ethereum !== "undefined" && window.contract) {
+        loadPendingDocuments();
+      } else {
+        document.getElementById("approvalNote").innerHTML =
+          "<h5 class='text-danger'>Please connect your wallet.</h5>";
+      }
+    });
+
+    // Only parse logs from the block where the new contract was deployed
+    const DEPLOYMENT_BLOCK = 7928970; // Replace with your actual deployment block
+
+    // Load unverified & not-denied documents from the contract
+    async function loadPendingDocuments() {
+      document.querySelector(".loader-wraper").classList.remove("d-none");
+      try {
+        // Retrieve the addHash events from your new contract
+        const events = await window.contract.getPastEvents("addHash", {
+          fromBlock: DEPLOYMENT_BLOCK,
+          toBlock: "latest",
+        });
+
+        const pendingDocs = [];
+
+        // For each addHash event, retrieve doc details
+        for (let evt of events) {
+          const docHash = evt.returnValues._docHash;
+
+          // docDetails => 9 fields:
+          // [0] doc_Hash, [1] blockNo, [2] timeStamp, [3] exporterInfo,
+          // [4] ipfsHash, [5] docExporter, [6] confirmations,
+          // [7] isVerified, [8] isDenied
+          let docDetails;
+          try {
+            docDetails = await window.contract.methods.findDocHash(docHash).call();
+          } catch (err) {
+            console.warn("Skipping docHash", docHash, "due to error:", err.message);
+            continue; // skip if findDocHash fails
+          }
+
+          const doc_Hash = docDetails[0];
+          const blockNo = docDetails[1];
+          const timeStamp = docDetails[2];
+          const exporterInfo = docDetails[3];
+          const ipfsHash = docDetails[4];
+          const docExporter = docDetails[5];
+          const confirmations = docDetails[6];
+          const isVerified = docDetails[7];
+          const isDenied = docDetails[8];
+
+          // Skip if doc doesn't exist in new contract
+          if (doc_Hash === "0x0000000000000000000000000000000000000000000000000000000000000000") {
+            console.warn("DocHash is zero, skipping:", docHash);
+            continue;
+          }
+
+          // Skip if verified or denied
+          if (!isVerified && !isDenied) {
+            pendingDocs.push({
+              docHash: doc_Hash,
+              blockNo,
+              timeStamp,
+              exporterInfo,
+              ipfsHash,
+              docExporter,
+              confirmations
+            });
+          }
+        }
+
+        // Display them
+        const container = document.getElementById("pendingDocs");
+        container.innerHTML = "";
+
+        if (pendingDocs.length === 0) {
+          container.innerHTML = "<h5 class='text-center text-warning'>No pending documents found.</h5>";
+        } else {
+          pendingDocs.forEach((doc, index) => {
+            const card = document.createElement("div");
+            card.className = "col-md-8 m-2 p-2 bg-dark text-light";
+
+            // Title / Basic Info
+            const header = document.createElement("h5");
+            header.textContent = `Document #${index + 1}`;
+            card.appendChild(header);
+
+            const info = document.createElement("p");
+            info.innerHTML = `
+                <strong>Doc Hash:</strong> ${truncateAddress(doc.docHash)}<br/>
+                <strong>Exporter:</strong> ${truncateAddress(doc.docExporter)}<br/>
+                <strong>Confirmations:</strong> ${doc.confirmations}
+              `;
+            card.appendChild(info);
+
+            // Embed the file from IPFS
+            const fileObject = document.createElement("object");
+            fileObject.style.width = "100%";
+            fileObject.style.height = "300px";
+            fileObject.data = `http://127.0.0.1:8080/ipfs/${doc.ipfsHash}`;
+            card.appendChild(fileObject);
+
+            // Approve / Deny buttons
+            const approveBtn = document.createElement("button");
+            approveBtn.className = "btn btn-success m-2";
+            approveBtn.textContent = "Approve";
+            approveBtn.onclick = () => confirmDocument(doc.docHash);
+
+            const denyBtn = document.createElement("button");
+            denyBtn.className = "btn btn-danger m-2";
+            denyBtn.textContent = "Deny";
+            denyBtn.onclick = () => denyDocument(doc.docHash);
+            // Create a container for buttons and center them
+            const btnContainer = document.createElement("div");
+            btnContainer.className = "d-flex justify-content-center";
+            // Optionally add margin-top to space them from the file preview
+            btnContainer.style.marginTop = "1rem";
+
+            // Append the buttons to the container
+            btnContainer.appendChild(approveBtn);
+            btnContainer.appendChild(denyBtn);
+
+            // Append the container to the card
+            card.appendChild(btnContainer);
+
+            container.appendChild(card);
+          });
+        }
+      } catch (err) {
+        console.error("Error loading pending documents:", err);
+        document.getElementById("approvalNote").innerHTML =
+          "<h5 class='text-danger'>Error loading documents: " + err.message + "</h5>";
+      }
+      document.querySelector(".loader-wraper").classList.add("d-none");
+    }
+
+    // Approve a document
+    async function confirmDocument(docHash) {
+      try {
+        await window.contract.methods.confirmDocHash(docHash)
+          .send({ from: window.userAddress })
+          .on("transactionHash", () => {
+            document.getElementById("approvalNote").innerHTML =
+              "<h5 class='text-info'>Transaction sent... waiting for confirmation.</h5>";
+          })
+          .on("receipt", () => {
+            document.getElementById("approvalNote").innerHTML =
+              "<h5 class='text-success'>Document approved successfully!</h5>";
+            loadPendingDocuments();
+          })
+          .on("error", (error) => {
+            document.getElementById("approvalNote").innerHTML =
+              "<h5 class='text-danger'>Error: " + error.message + "</h5>";
+          });
+      } catch (err) {
+        document.getElementById("approvalNote").innerHTML =
+          "<h5 class='text-danger'>Error: " + err.message + "</h5>";
+      }
+    }
+
+    // Deny a document
+    async function denyDocument(docHash) {
+      try {
+        await window.contract.methods.denyDocHash(docHash)
+          .send({ from: window.userAddress })
+          .on("transactionHash", () => {
+            document.getElementById("approvalNote").innerHTML =
+              "<h5 class='text-info'>Deny transaction sent... waiting for confirmation.</h5>";
+          })
+          .on("receipt", () => {
+            document.getElementById("approvalNote").innerHTML =
+              "<h5 class='text-success'>Document denied successfully!</h5>";
+            loadPendingDocuments();
+          })
+          .on("error", (error) => {
+            document.getElementById("approvalNote").innerHTML =
+              "<h5 class='text-danger'>Error: " + error.message + "</h5>";
+          });
+      } catch (err) {
+        document.getElementById("approvalNote").innerHTML =
+          "<h5 class='text-danger'>Error: " + err.message + "</h5>";
+      }
+    }
+  </script>
+</body>
+
+</html>
