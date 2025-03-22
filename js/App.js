@@ -1,6 +1,6 @@
 window.CONTRACT = {
   // address: "0x635EfEDEa00d4d085Bba5cA475350E9aa8D22E44",   // Old contract 
-  address: "0xAdbAbBd0f4bc9d12E736E53F868B233Ba3ec3E09", // New contract
+  address: "0x9C9bF487F8B2675C36C30CeDA95741E515FEA37E", // New contract
   network: "https://sepolia.infura.io",
   explore: "https://sepolia.etherscan.io",
 
@@ -257,14 +257,14 @@ window.CONTRACT = {
       "stateMutability": "view",
       "type": "function"
     },
-  
+
     // Constructor is optional to include in the ABI if you don't call it from code
     {
       "inputs": [],
       "stateMutability": "nonpayable",
       "type": "constructor"
     },
-  
+
     // Owner-only function to change the contract owner
     {
       "inputs": [
@@ -275,7 +275,7 @@ window.CONTRACT = {
       "stateMutability": "nonpayable",
       "type": "function"
     },
-  
+
     // Exporter management
     {
       "inputs": [
@@ -317,7 +317,7 @@ window.CONTRACT = {
       "stateMutability": "view",
       "type": "function"
     },
-  
+
     // Per-exporter verifier management
     {
       "inputs": [
@@ -349,7 +349,7 @@ window.CONTRACT = {
       "stateMutability": "view",
       "type": "function"
     },
-  
+
     // Document upload & multi-signature verification
     {
       "inputs": [
@@ -359,6 +359,19 @@ window.CONTRACT = {
       "name": "addDocHash",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllExporters",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -389,7 +402,7 @@ window.CONTRACT = {
       "name": "addHash",
       "type": "event"
     },
-    
+
     {
       "anonymous": false,
       "inputs": [
@@ -418,17 +431,17 @@ window.CONTRACT = {
         { "internalType": "bytes32", "name": "doc_Hash", "type": "bytes32" },
         { "internalType": "uint256", "name": "blockNo", "type": "uint256" },
         { "internalType": "uint256", "name": "timeStamp", "type": "uint256" },
-        { "internalType": "string",  "name": "exporterInfo", "type": "string" },
-        { "internalType": "string",  "name": "ipfsHash", "type": "string" },
+        { "internalType": "string", "name": "exporterInfo", "type": "string" },
+        { "internalType": "string", "name": "ipfsHash", "type": "string" },
         { "internalType": "address", "name": "docExporter", "type": "address" },
         { "internalType": "uint256", "name": "confirmations", "type": "uint256" },
-        { "internalType": "bool",    "name": "isVerified", "type": "bool" },
-        { "internalType": "bool",    "name": "isDenied",   "type": "bool" }
+        { "internalType": "bool", "name": "isVerified", "type": "bool" },
+        { "internalType": "bool", "name": "isDenied", "type": "bool" }
       ],
       "stateMutability": "view",
       "type": "function"
     }
-  ]  
+  ]
 };
 //login
 async function connect() {
@@ -449,7 +462,7 @@ async function connect() {
       console.log(selectedAccount);
       window.localStorage.setItem("userAddress", window.userAddress);
       window.location.reload();
-    } catch (error) {}
+    } catch (error) { }
   } else {
     $("#upload_file_button").attr("disabled", true);
     $("#doc-file").attr("disabled", true);
@@ -469,13 +482,13 @@ async function createAdmin(newAdminAddress) {
     await window.contract.methods.changeOwner(newAdminAddress)
       .send({ from: window.userAddress })
       .on("transactionHash", (hash) => {
-         $("#note").html("<h5 class='text-info'>Admin update transaction sent. Waiting for confirmation...</h5>");
+        $("#note").html("<h5 class='text-info'>Admin update transaction sent. Waiting for confirmation...</h5>");
       })
       .on("receipt", (receipt) => {
-         $("#note").html("<h5 class='text-success'>Admin updated successfully!</h5>");
+        $("#note").html("<h5 class='text-success'>Admin updated successfully!</h5>");
       })
       .on("error", (error) => {
-         $("#note").html(`<h5 class='text-danger'>${error.message}</h5>`);
+        $("#note").html(`<h5 class='text-danger'>${error.message}</h5>`);
       });
   } catch (error) {
     $("#note").html(`<h5 class='text-danger'>${error.message}</h5>`);
@@ -485,7 +498,7 @@ async function createAdmin(newAdminAddress) {
 
 
 window.onload = async () => {
-  if(window.location.href.indexOf("verify.html") > -1){
+  if (window.location.href.indexOf("verify.html") > -1) {
     $("#loader").hide();
     $(".loader-wraper").fadeOut("slow");
 
@@ -510,21 +523,58 @@ window.onload = async () => {
       window.CONTRACT.abi,
       window.CONTRACT.address
     );
-        // If on the admin panel, check if the user is the admin (contract owner)
-        if (window.location.href.indexOf("admin.html") > -1) {
-          const currentOwner = await window.contract.methods.owner().call();
-          if (window.userAddress.toLowerCase() !== currentOwner.toLowerCase()) {
-            document.body.innerHTML = `
+    // If on the admin panel, check if the user is the admin (contract owner)
+    if (window.location.href.indexOf("admin.html") > -1) {
+      const currentOwner = await window.contract.methods.owner().call();
+      if (window.userAddress.toLowerCase() !== currentOwner.toLowerCase()) {
+        document.body.innerHTML = `
             <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
               <h1>Unauthorized Access</h1>
               <button class="btn btn-primary mt-3" onclick="connect()">Login</button>
-            </div>`;            
+            </div>`;
+        return;
+      } else {
+        // Admin is logged in: load admin functionalities such as counters.
+        await getCounters();
+      }
+    }
+
+    // If on approve page, check if user is admin or verifier
+    if (window.location.href.indexOf("approve.html") > -1) {
+      // Make sure user is logged in
+      if (!window.userAddress || window.userAddress.length < 10) {
+        document.body.innerHTML = `
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+          <h1>Please connect your wallet</h1>
+          <button class="btn btn-primary mt-3" onclick="connect()">Login</button>
+        </div>`;
+        return;
+      }
+
+      // 1. Check if user is the contract owner
+      const currentOwner = await window.contract.methods.owner().call();
+      if (window.userAddress.toLowerCase() === currentOwner.toLowerCase()) {
+        // user is admin => allow
+        // loadPendingDocuments() or do nothing here
+      } else {
+        // 2. If not admin => check if user is a verifier for at least one exporter
+        const isVerifier = await isVerifierForAny(window.userAddress);
+        if (!isVerifier) {
+          // unauthorized
+          document.body.innerHTML = `
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+            <h1>Unauthorized Access</h1>
+            <button class="btn btn-primary mt-3" onclick="connect()">Login</button>
+          </div>`;
           return;
-          } else {
-            // Admin is logged in: load admin functionalities such as counters.
-            await getCounters();
-          }
         }
+      }
+
+      // If we get here, user is admin or a verifier => proceed
+      // e.g. loadPendingDocuments();
+    }
+
+
     //checking if user loged in
     if (window.userAddress.length > 10) {
       // let isLocked =await window.ethereum._metamask.isUnlocked();
@@ -533,11 +583,10 @@ window.onload = async () => {
       $("#loginButton").hide();
       $("#userAddress")
         .html(`<i class="fa-solid fa-address-card mx-2 text-primary"></i>${truncateAddress(
-        window.userAddress
-      )}
-       <a class="text-info" href="${window.CONTRACT.explore}/address/${
-        window.userAddress
-      }" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-square-arrow-up-right text-warning"></i></a>  
+          window.userAddress
+        )}
+       <a class="text-info" href="${window.CONTRACT.explore}/address/${window.userAddress
+          }" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-square-arrow-up-right text-warning"></i></a>  
        </a>`);
 
       //if admin is viewed then show the doc,exporter counters
@@ -573,7 +622,30 @@ window.onload = async () => {
     // alert("Please download metamask extension first.\nhttps://metamask.io/download/");
     // window.location = "https://metamask.io/download/"
   }
+
+
+
 };
+
+///new function to get the exporter info
+async function isVerifierForAny(userAddr) {
+  // 1. Gather all exporter addresses
+  const exporters = await getAllExporters();
+
+  // 2. For each exporter, call isAuthorizedVerifier(exporter, userAddr)
+  for (let exp of exporters) {
+    const authorized = await window.contract.methods.isAuthorizedVerifier(exp, userAddr).call();
+    if (authorized) {
+      return true; // Found at least one exporter for which userAddr is a verifier
+    }
+  }
+  return false; // Not a verifier for any
+}
+
+async function getAllExporters() {
+  return await window.contract.methods.getAllExporters().call();
+}
+
 
 async function verify_Hash() {
   //Show the loading
@@ -696,7 +768,7 @@ function print_verification_info(result, is_verified) {
       `<span class="text-info"><i class="fa-solid fa-cube"></i></span> ${result[0]}`
     );
     document.getElementById("student-document").src = `http://127.0.0.1:8080/ipfs/${result[3]}`;
-    document.getElementById("download-document").href =document.getElementById("student-document").src;
+    document.getElementById("download-document").href = document.getElementById("student-document").src;
     $(".transaction-status").show();
   }
 }
@@ -727,8 +799,8 @@ async function get_ethBalance() {
     if (err === null) {
       $("#userBalance").html(
         "<i class='fa-brands fa-gg-circle mx-2 text-danger'></i>" +
-          web3.utils.fromWei(balance).substr(0, 6) +
-          ""
+        web3.utils.fromWei(balance).substr(0, 6) +
+        ""
       );
     } else $("#userBalance").html("n/a");
   });
@@ -743,9 +815,9 @@ if (window.ethereum) {
 function printUploadInfo(result) {
   $("#transaction-hash").html(
     `<a target="_blank" title="View Transaction at Ether Scan" href="${window.CONTRACT.explore}/tx/` +
-      result.transactionHash +
-      '"+><i class="fa fa-check-circle font-size-2 mx-1 text-white mx-1"></i></a>' +
-      truncateAddress(result.transactionHash)
+    result.transactionHash +
+    '"+><i class="fa fa-check-circle font-size-2 mx-1 text-white mx-1"></i></a>' +
+    truncateAddress(result.transactionHash)
   );
   $("#file-hash").html(
     `<i class="fa-solid fa-hashtag mx-1"></i> ${truncateAddress(
@@ -864,7 +936,7 @@ async function sendHash() {
         generateQRCode();
       })
 
-      .on("confirmation", function (confirmationNr) {})
+      .on("confirmation", function (confirmationNr) { })
       .on("error", function (error) {
         console.log(error.message);
         $("#note").html(`<h5 class="text-center">${error.message} 😏</h5>`);
@@ -961,7 +1033,7 @@ async function get_ChainID() {
       window.chainID = "Kovan Test Network";
       break;
     case 80002:
-      window.chainID = "Polygon Amoy Testnet"; 
+      window.chainID = "Polygon Amoy Testnet";
       break;
     case 11155111:
       window.chainID = "Sepolia";
@@ -1067,7 +1139,7 @@ async function addExporter() {
           );
         })
 
-        .on("confirmation", function (confirmationNr) {})
+        .on("confirmation", function (confirmationNr) { })
         .on("error", function (error) {
           console.log(error.message);
           $("#note").html(`<h5 class="text-center">${error.message}</h5>`);
@@ -1154,7 +1226,7 @@ async function editExporter() {
           );
         })
 
-        .on("confirmation", function (confirmationNr) {})
+        .on("confirmation", function (confirmationNr) { })
         .on("error", function (error) {
           console.log(error.message);
           $("#note").html(`<h5 class="text-center">${error.message} 👍</h5>`);
@@ -1317,14 +1389,14 @@ function printTransactions(data) {
     a.className =
       "col-lg-3 col-md-4 col-sm-5 m-2 bg-dark text-light rounded position-relative card";
     a.style = "overflow:hidden;";
-    
+
     const image = document.createElement("object");
     image.style = "width:100%; height:100%;";
     image.data = `http://127.0.0.1:8080/ipfs/${data[i].returnValues[1]}`;
-    
 
-    
-    
+
+
+
     const num = document.createElement("h1");
     num.append(document.createTextNode(i + 1));
     num.style =
@@ -1369,19 +1441,19 @@ function updateDocumentsUI(events) {
     card.target = "_blank";
     card.className = "col-lg-3 col-md-4 col-sm-5 m-2 bg-dark text-light rounded position-relative card";
     card.style = "overflow:hidden;";
-    
+
     // Create an element to load the image (or other content)
     const image = document.createElement("object");
     image.style = "width:100%; height:100%;";
     // Use your IPFS gateway URL; here we use ipfs.io
     image.data = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
-    
+
     // Optionally, add a number overlay as in recent transactions display
     const numberOverlay = document.createElement("h1");
     numberOverlay.textContent = i + 1;
     numberOverlay.style =
       "position:absolute; left:4px; bottom:-20px; font-size:4rem; color: rgba(20,63,74,0.35);";
-    
+
     card.appendChild(image);
     card.appendChild(numberOverlay);
     listContainer.prepend(card);
@@ -1391,29 +1463,29 @@ function updateDocumentsUI(events) {
   function displayVerifiedDocument(ipfsHash) {
     // 1. Select the container (the same .right div in your verify.html)
     const container = document.querySelector(".right.col-lg-6");
-    
+
     // 2. Clear out anything that might already be there
     container.innerHTML = "";
-  
+
     // 3. Create a link (a 'card') that wraps your PDF or image
     const card = document.createElement("a");
     // Optionally link to Etherscan or IPFS directly
-    card.href = `http://127.0.0.1:8080/ipfs/${ipfsHash}`; 
+    card.href = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
     card.target = "_blank";
     card.className = "col-lg-3 col-md-4 col-sm-5 m-2 bg-dark text-light rounded position-relative card";
     card.style.overflow = "hidden";
-  
+
     // 4. Create an <object> to display the file
     // If it's an image, you could use <img>. If it's a PDF, <object> or <iframe> is better.
     const fileObject = document.createElement("object");
     fileObject.style.width = "100%";
     fileObject.style.height = "400px";
-    fileObject.data = `http://127.0.0.1:8080/ipfs/${ipfsHash}`; 
+    fileObject.data = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
     // If you have a public gateway, you could use https://ipfs.io/ipfs/${ipfsHash}
-  
+
     // 5. Append the <object> into the link/card
     card.appendChild(fileObject);
-  
+
     // 6. Finally, append the card to the container
     container.appendChild(card);
   }

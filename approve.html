@@ -16,6 +16,62 @@
   <link rel="stylesheet" href="css/main.css" />
   <link href="./css/aos.min.css" rel="stylesheet" />
   <link rel="icon" href="./assets/images/icon.png" />
+  <script>
+    // We'll define a function that checks if the user is admin or a verifier
+    // before we load the main content.
+
+    async function checkApprovePageAuthorization() {
+      // Wait for App.js to load (which sets window.contract) 
+      // and for user to connect (which sets window.userAddress).
+      if (typeof window.ethereum === "undefined" || !window.contract) {
+        // Metamask not detected or contract not loaded
+        document.body.innerHTML = `
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+            <h1>Please connect your wallet</h1>
+            <button class="btn btn-primary mt-3" onclick="connect()">Login</button>
+          </div>`;
+        return false;
+      }
+
+      // 1. Ensure user is connected (check window.userAddress).
+      const user = window.userAddress;
+      if (!user || user.length < 10) {
+        // Not connected => block
+        document.body.innerHTML = `
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+            <h1>Please connect your wallet</h1>
+            <button class="btn btn-primary mt-3" onclick="connect()">Login</button>
+          </div>`;
+        return false;
+      }
+
+      // 2. Check if user is admin (contract owner).
+      const currentOwner = await window.contract.methods.owner().call();
+      if (user.toLowerCase() === currentOwner.toLowerCase()) {
+        // Admin => allow
+        return true;
+      }
+
+      // 3. If not admin => check if user is a verifier for at least one exporter
+      //    We'll define a helper in App.js or inline below:
+      const exporters = await getAllExporters();  // Must exist in App.js
+      for (let exp of exporters) {
+        const authorized = await window.contract.methods.isAuthorizedVerifier(exp, user).call();
+        if (authorized) {
+          // user is a verifier for at least one exporter
+          return true;
+        }
+      }
+
+      // If we get here, user is neither admin nor a verifier
+      document.body.innerHTML = `
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+          <h1>Unauthorized Access</h1>
+          <button class="btn btn-primary mt-3" onclick="connect()">Login</button>
+        </div>`;
+      return false;
+    }
+  </script>
 </head>
 
 <body>
@@ -89,6 +145,19 @@
   <script src="./js/aos.js"></script>
   <script src="./js/script.js"></script>
 
+  <script>
+    window.addEventListener("load", async () => {
+      // 1) Check if authorized
+      const isAuthorized = await checkApprovePageAuthorization();
+      if (!isAuthorized) {
+        // We already replaced the page with "Unauthorized" in the check function
+        return;
+      }
+
+      // 2) If authorized, proceed to load pending docs
+      loadPendingDocuments();
+    });
+  </script>
   <script>
     window.addEventListener("load", async () => {
       if (typeof window.ethereum !== "undefined" && window.contract) {
