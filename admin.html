@@ -1,145 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/loader.css">
-  
-    <link
-      href="css/bootstrap.min.css"
-      rel="stylesheet"
-    />  
-    <script src="js/App.js"></script>
-    <script src="node_modules\web3\dist\web3.min.js"></script>
-    <link href="./css/aos.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <link rel="stylesheet" href="css/main.css" />
-    <link rel="icon" href="./assets/images/icon.png" />
-    <title>Admin Dashboard</title>
-  </head>
 
-  <body>
-    <div class="loader-wraper">
-      <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./css/loader.css">
+
+
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <script src="js/App.js"></script>
+  <script src="node_modules\web3\dist\web3.min.js"></script>
+  <link href="./css/aos.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="icon" href="./assets/images/icon.png" />
+  <title>Admin Dashboard</title>
+</head>
+
+<body>
+  <div class="loader-wraper">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
-    <div >
-      <i onclick="topFunction()" id="scroll-btn" class="fa-solid fa-angle-up"></i>
-    </div>
-    <!-----------------------------navbBar Start-------------------->
+  </div>
+  <div>
+    <i onclick="topFunction()" id="scroll-btn" class="fa-solid fa-angle-up"></i>
+  </div>
+  <!-----------------------------navbBar Start-------------------->
   <!--NavBar Start-->
   <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 navbar-dark">
     <div class="container">
       <a class="navbar-brand" href="index.html">
         <i class="fa-solid fa-graduation-cap home_text"></i>
         <span class="home_text">Secure</span>Docs
-        </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link " aria-current="page" href="index.html">Home</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="index.html">Home</a>
           </li>
           <li class="nav-item">
-          <a class="nav-link  " href="upload.html">Upload </a>
+            <a class="nav-link  " href="upload.html">Upload </a>
           </li>
           <li class="nav-item">
-          <a class="nav-link" href="verify.html">Verify </a>
+            <a class="nav-link" href="verify.html">Verify </a>
           </li>
           <li class="nav-item">
-          <a class="nav-link" href="delete.html">Delete </a>
+            <a class="nav-link" href="delete.html">Delete </a>
           </li>
-
           <li class="nav-item">
             <a class="nav-link active" href="admin.html">Admin</a>
-            </li>         
-      </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="approve.html">Approve Document</a>
+          </li>
+        </ul>
 
-      <div class="d-flex">
-        <button
-          id="loginButton"
-          onclick="connect()"
-          class="btn main-button"
-        >Login</button>
-        <button
-          id="logoutButton"
-          onclick="disconnect()"
-          class="btn main-button"
-        > Logout</button>
-      </div>
-      </div>
-    </div>
-    </nav>
-    <!---------------------NavBar End-------------------->
-
-    <!--=====================Upload Document===========================-->
-      <div class="container">
-        <div class="alert alert-danger d-none mt-2">
-          Please download MetaMask at <a target="_blank" href="https://metamask.io/download">Metamask Site</a>
-         </div>
-        <div class="row content m-1"> 
-          <div data-aos="fade-down" class="box wallet-status col-lg-12 d-flex flex-column my-2">
-            <i class="fa-brands fa-connectdevelop icon" aria-hidden="true"></i>
-         
-           <span id="userAddress" class="p-1">Address : <span class="text-warning">n/a</span></span>
-           <span id="network" class="p-1">Network: <span class="text-warning">n/a</span></span>
-           <span id="userBalance" class="p-1">Balance : <span class="text-warning">n/a</span></span>
-           <span id="num-hashes" class="p-1"><span class="text-warning"></span></span>
-           <span id="num-exporters" class="p-1"><span class="text-warning"></span></span>
-           
-          </div>
-        
-          <div data-aos="zoom-in" class="col-lg-6 py-3 data-upload my-3 mx-md-2">
-            <input   id="Exporter-address" type="text"  placeholder="Exporter Address"  required/>
-            <input  
-              type="text" 
-              id="info"
-              placeholder="Univesity"
-              required
-            />
-           
-            <span id="note" class="text-danger"
-              ></span
-            >
-            <img id="loader" class="d-none" src="files/loader.svg" alt="loader">
-            <div  class="btn-container mt-3">
-              <input
-              onclick="addExporter()"
-                class="btn btn-primary  exporter-button main-button"
-                type="submit"
-                value="Add Exporter"
-                id="ExporterBtn"
-              />
-              <input
-              onclick="deleteExporter()"
-                class="btn btn-danger  exporter-button main-button"
-                type="submit"
-                value="Delete Exporter"
-                id="delete"
-              />
-              <input
-              onclick="editExporter()"
-                class="btn btn-warning  exporter-button main-button"
-                type="submit"
-                value="Edit Exporter"
-                id="edit"
-              />
-            </div>
-           
-          </div>
-          
- 
+        <div class="d-flex">
+          <button id="loginButton" onclick="connect()" class="btn main-button">Login</button>
+          <button id="logoutButton" onclick="disconnect()" class="btn main-button"> Logout</button>
         </div>
       </div>
+    </div>
+  </nav>
+  <!---------------------NavBar End-------------------->
+
+  <!--=====================Upload Document===========================-->
+  <div class="container">
+    <div class="alert alert-danger d-none mt-2">
+      Please download MetaMask at <a target="_blank" href="https://metamask.io/download">Metamask Site</a>
+    </div>
+    <div class="row content m-1">
+      <div data-aos="fade-down" class="box wallet-status col-lg-12 d-flex flex-column my-2">
+        <i class="fa-brands fa-connectdevelop icon" aria-hidden="true"></i>
+
+        <span id="userAddress" class="p-1">Address : <span class="text-warning">n/a</span></span>
+        <span id="network" class="p-1">Network: <span class="text-warning">n/a</span></span>
+        <span id="userBalance" class="p-1">Balance : <span class="text-warning">n/a</span></span>
+        <span id="num-hashes" class="p-1"><span class="text-warning"></span></span>
+        <span id="num-exporters" class="p-1"><span class="text-warning"></span></span>
+
+      </div>
+
+      <div data-aos="zoom-in" class="col-lg-6 py-3 data-upload my-3 mx-md-2">
+        <input id="Exporter-address" type="text" placeholder="Exporter Address" required />
+
+        <input type="text" id="info" placeholder="Univesity" required />
+
+        <span id="note" class="text-danger"></span>
+        <img id="loader" class="d-none" src="files/loader.svg" alt="loader">
+        <div class="btn-container mt-3">
+          <input onclick="addExporter()" class="btn btn-primary  exporter-button main-button" type="submit"
+            value="Add Exporter" id="ExporterBtn" />
+          <input onclick="deleteExporter()" class="btn btn-danger  exporter-button main-button" type="submit"
+            value="Delete Exporter" id="delete" />
+          <input onclick="editExporter()" class="btn btn-warning  exporter-button main-button" type="submit"
+            value="Edit Exporter" id="edit" />
+        </div>
+      </div>
+      <!-- Add new admin -->
+      <div data-aos="zoom-in" class="col-lg-6 py-3 data-upload my-3 mx-md-2">
+        <h3 class="mb-3" style="color: #16bffd;">Assign a New Admin</h3>
+        <input type="text" id="newAdminAddress" placeholder="Enter new admin wallet address" required />
+        <!-- We'll show messages here -->
+        <div id="adminNote" class="mt-2"></div>
+        <button class="btn btn-primary exporter-button main-button w-100" id="createAdminBtn">
+          Assign Admin
+        </button>
+      </div>
+
+      <!-- Assign a New Verifier -->
+      <div data-aos="zoom-in" class="col-lg-6 py-3 data-upload my-3 mx-md-2">
+        <h3 class="mb-3" style="color: #16bffd;">Assign a New Verifier</h3>
+        <input type="text" id="verifierAddress" placeholder="Enter new verifier wallet address" required
+          class="form-control mb-2" />
+        <div id="verifierNote" class="mt-2"></div>
+        <button class="btn btn-primary exporter-button main-button w-100" id="assignVerifierBtn">
+          Add Verifier
+        </button>
+      </div>
+
+      <script>
+        // When user clicks the "Assign Admin" button
+        document.getElementById("createAdminBtn").addEventListener("click", async () => {
+          const newAdminAddress = document.getElementById("newAdminAddress").value.trim();
+
+          // Basic check for address format
+          if (!newAdminAddress.startsWith("0x") || newAdminAddress.length !== 42) {
+            document.getElementById("adminNote").innerHTML =
+              "<h5 class='text-danger'>Please enter a valid wallet address (42 chars, starting with 0x).</h5>";
+            return;
+          }
+
+          // Now call our createAdmin function
+          createAdmin(newAdminAddress);
+        });
+
+        async function createAdmin(newAdminAddress) {
+          try {
+            // 1. Check if you are the contract owner
+            const currentOwner = await window.contract.methods.owner().call();
+            if (window.userAddress.toLowerCase() !== currentOwner.toLowerCase()) {
+              document.getElementById("adminNote").innerHTML =
+                "<h5 class='text-danger'>Only the current admin (owner) can assign a new admin.</h5>";
+              return;
+            }
+
+            // 2. Call changeOwner in the contract
+            await window.contract.methods
+              .changeOwner(newAdminAddress)
+              .send({ from: window.userAddress })
+              .on("transactionHash", () => {
+                document.getElementById("adminNote").innerHTML =
+                  "<h5 class='text-info'>Transaction sent... waiting for confirmation.</h5>";
+              })
+              .on("receipt", () => {
+                document.getElementById("adminNote").innerHTML =
+                  "<h5 class='text-success'>Admin updated successfully!</h5>";
+              })
+              .on("error", (error) => {
+                document.getElementById("adminNote").innerHTML =
+                  "<h5 class='text-danger'>Error: " + error.message + "</h5>";
+              });
+
+          } catch (err) {
+            document.getElementById("adminNote").innerHTML =
+              "<h5 class='text-danger'>Error: " + err.message + "</h5>";
+          }
+        }
+      </script>
+      <script>
+        // Listen for button click
+        document.getElementById("assignVerifierBtn").addEventListener("click", async () => {
+          const verifierAddress = document.getElementById("verifierAddress").value;
+
+          // Basic validation
+          if (!verifierAddress || !verifierAddress.startsWith("0x") || verifierAddress.length !== 42) {
+            document.getElementById("verifierNote").innerHTML =
+              "<h5 class='text-danger'>Please enter a valid wallet address.</h5>";
+            return;
+          }
+
+          try {
+            // Call the contract function to add a verifier for the current exporter
+            await window.contract.methods.addVerifierForExporter(verifierAddress)
+              .send({ from: window.userAddress })
+              .on("transactionHash", () => {
+                document.getElementById("verifierNote").innerHTML =
+                  "<h5 class='text-info'>Transaction sent... waiting for confirmation.</h5>";
+              })
+              .on("receipt", () => {
+                document.getElementById("verifierNote").innerHTML =
+                  "<h5 class='text-success'>Verifier assigned successfully!</h5>";
+              })
+              .on("error", (error) => {
+                document.getElementById("verifierNote").innerHTML =
+                  "<h5 class='text-danger'>Error: " + error.message + "</h5>";
+              });
+          } catch (err) {
+            document.getElementById("verifierNote").innerHTML =
+              "<h5 class='text-danger'>Error: " + err.message + "</h5>";
+          }
+        });
+      </script>
+    </div>
     <!--=====================Footer===========================-->
     <div class="footer-dark">
       <footer>
         <div class="container">
           <div class="row">
             <div class="col-md-6 item text">
-              <h3  data-aos="fade-right"> 
-                 <i class="fa-solid fa-graduation-cap"></i>
-                SecureDocs</h3>
+              <h3 data-aos="fade-right">
+                <i class="fa-solid fa-graduation-cap"></i>
+                SecureDocs
+              </h3>
             </div>
           </div>
         </div>
@@ -147,21 +234,21 @@
     </div>
     <script src="./js/aos.js"></script>
     <script src="./js/script.js"></script>
-    <script
-			  src="https://code.jquery.com/jquery-3.6.0.js"
-			  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-			  crossorigin="anonymous"></script>    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="node_modules\web3\dist\web3.min.js"></script>
-    
+
     <!--=====================Start Code===========================-->
     <script defer>
-  document.getElementById("Exporter-address").onclick= ()=>{
-  $("#note").html(``);
-  $("#ExporterBtn").attr("disabled", false);
-  $("#edit").attr("disabled", false);
-  $("#delete").attr("disabled", false);
-}
- 
+      document.getElementById("Exporter-address").onclick = () => {
+        $("#note").html(``);
+        $("#ExporterBtn").attr("disabled", false);
+        $("#edit").attr("disabled", false);
+        $("#delete").attr("disabled", false);
+      }
+
     </script>
-  </body>
+</body>
+
 </html>

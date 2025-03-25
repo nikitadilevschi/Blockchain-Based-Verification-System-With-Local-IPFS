@@ -1,220 +1,447 @@
 window.CONTRACT = {
-  address: "0x635EfEDEa00d4d085Bba5cA475350E9aa8D22E44",
+  // address: "0x635EfEDEa00d4d085Bba5cA475350E9aa8D22E44",   // Old contract 
+  address: "0x9C9bF487F8B2675C36C30CeDA95741E515FEA37E", // New contract
   network: "https://sepolia.infura.io",
   explore: "https://sepolia.etherscan.io",
 
   // Your Contract ABI
+  // abi: [
+  //   {
+  //     inputs: [],
+  //     stateMutability: "nonpayable",
+  //     type: "constructor",
+  //   },
+  //   {
+  //     anonymous: false,
+  //     inputs: [
+  //       {
+  //         indexed: true,
+  //         internalType: "address",
+  //         name: "_exporter",
+  //         type: "address",
+  //       },
+  //       {
+  //         indexed: false,
+  //         internalType: "string",
+  //         name: "_ipfsHash",
+  //         type: "string",
+  //       },
+  //     ],
+  //     name: "addHash",
+  //     type: "event",
+  //   },
+  //   {
+  //     inputs: [
+  //       {
+  //         internalType: "bytes32",
+  //         name: "hash",
+  //         type: "bytes32",
+  //       },
+  //       {
+  //         internalType: "string",
+  //         name: "_ipfs",
+  //         type: "string",
+  //       },
+  //     ],
+  //     name: "addDocHash",
+  //     outputs: [],
+  //     stateMutability: "nonpayable",
+  //     type: "function",
+  //   },
+  //   {
+  //     inputs: [
+  //       {
+  //         internalType: "address",
+  //         name: "_add",
+  //         type: "address",
+  //       },
+  //       {
+  //         internalType: "string",
+  //         name: "_info",
+  //         type: "string",
+  //       },
+  //     ],
+  //     name: "add_Exporter",
+  //     outputs: [],
+  //     stateMutability: "nonpayable",
+  //     type: "function",
+  //   },
+  //   {
+  //     inputs: [
+  //       {
+  //         internalType: "address",
+  //         name: "_add",
+  //         type: "address",
+  //       },
+  //       {
+  //         internalType: "string",
+  //         name: "_newInfo",
+  //         type: "string",
+  //       },
+  //     ],
+  //     name: "alter_Exporter",
+  //     outputs: [],
+  //     stateMutability: "nonpayable",
+  //     type: "function",
+  //   },
+  //   {
+  //     inputs: [
+  //       {
+  //         internalType: "address",
+  //         name: "_newOwner",
+  //         type: "address",
+  //       },
+  //     ],
+  //     name: "changeOwner",
+  //     outputs: [],
+  //     stateMutability: "nonpayable",
+  //     type: "function",
+  //   },
+  //   {
+  //     inputs: [],
+  //     name: "count_Exporters",
+  //     outputs: [
+  //       {
+  //         internalType: "uint16",
+  //         name: "",
+  //         type: "uint16",
+  //       },
+  //     ],
+  //     stateMutability: "view",
+  //     type: "function",
+  //   },
+  //   {
+  //     inputs: [],
+  //     name: "count_hashes",
+  //     outputs: [
+  //       {
+  //         internalType: "uint16",
+  //         name: "",
+  //         type: "uint16",
+  //       },
+  //     ],
+  //     stateMutability: "view",
+  //     type: "function",
+  //   },
+  //   {
+  //     inputs: [
+  //       {
+  //         internalType: "bytes32",
+  //         name: "_hash",
+  //         type: "bytes32",
+  //       },
+  //     ],
+  //     name: "deleteHash",
+  //     outputs: [],
+  //     stateMutability: "nonpayable",
+  //     type: "function",
+  //   },
+  //   {
+  //     inputs: [
+  //       {
+  //         internalType: "address",
+  //         name: "_add",
+  //         type: "address",
+  //       },
+  //     ],
+  //     name: "delete_Exporter",
+  //     outputs: [],
+  //     stateMutability: "nonpayable",
+  //     type: "function",
+  //   },
+  //   {
+  //     inputs: [
+  //       {
+  //         internalType: "bytes32",
+  //         name: "_hash",
+  //         type: "bytes32",
+  //       },
+  //     ],
+  //     name: "findDocHash",
+  //     outputs: [
+  //       {
+  //         internalType: "uint256",
+  //         name: "",
+  //         type: "uint256",
+  //       },
+  //       {
+  //         internalType: "uint256",
+  //         name: "",
+  //         type: "uint256",
+  //       },
+  //       {
+  //         internalType: "string",
+  //         name: "",
+  //         type: "string",
+  //       },
+  //       {
+  //         internalType: "string",
+  //         name: "",
+  //         type: "string",
+  //       },
+  //     ],
+  //     stateMutability: "view",
+  //     type: "function",
+  //   },
+  //   {
+  //     inputs: [
+  //       {
+  //         internalType: "address",
+  //         name: "_add",
+  //         type: "address",
+  //       },
+  //     ],
+  //     name: "getExporterInfo",
+  //     outputs: [
+  //       {
+  //         internalType: "string",
+  //         name: "",
+  //         type: "string",
+  //       },
+  //     ],
+  //     stateMutability: "view",
+  //     type: "function",
+  //   },
+  //   {
+  //     inputs: [],
+  //     name: "owner",
+  //     outputs: [
+  //       {
+  //         internalType: "address",
+  //         name: "",
+  //         type: "address",
+  //       },
+  //     ],
+  //     stateMutability: "view",
+  //     type: "function",
+  //   },
+  // ], 
+
+  // New Contract ABI
   abi: [
+    // Public variables (optional to include if you only call them in code, 
+    // but they're shown here for completeness)
     {
-      inputs: [],
-      stateMutability: "nonpayable",
-      type: "constructor",
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        { "internalType": "address", "name": "", "type": "address" }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: "address",
-          name: "_exporter",
-          type: "address",
-        },
-        {
-          indexed: false,
-          internalType: "string",
-          name: "_ipfsHash",
-          type: "string",
-        },
+      "inputs": [],
+      "name": "count_Exporters",
+      "outputs": [
+        { "internalType": "uint16", "name": "", "type": "uint16" }
       ],
-      name: "addHash",
-      type: "event",
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
-        {
-          internalType: "bytes32",
-          name: "hash",
-          type: "bytes32",
-        },
-        {
-          internalType: "string",
-          name: "_ipfs",
-          type: "string",
-        },
+      "inputs": [],
+      "name": "count_hashes",
+      "outputs": [
+        { "internalType": "uint16", "name": "", "type": "uint16" }
       ],
-      name: "addDocHash",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
-        {
-          internalType: "address",
-          name: "_add",
-          type: "address",
-        },
-        {
-          internalType: "string",
-          name: "_info",
-          type: "string",
-        },
+      "inputs": [],
+      "name": "requiredConfirmations",
+      "outputs": [
+        { "internalType": "uint256", "name": "", "type": "uint256" }
       ],
-      name: "add_Exporter",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "view",
+      "type": "function"
+    },
+
+    // Constructor is optional to include in the ABI if you don't call it from code
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+
+    // Owner-only function to change the contract owner
+    {
+      "inputs": [
+        { "internalType": "address", "name": "_newOwner", "type": "address" }
+      ],
+      "name": "changeOwner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+
+    // Exporter management
+    {
+      "inputs": [
+        { "internalType": "address", "name": "_add", "type": "address" },
+        { "internalType": "string", "name": "_info", "type": "string" }
+      ],
+      "name": "add_Exporter",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [
-        {
-          internalType: "address",
-          name: "_add",
-          type: "address",
-        },
-        {
-          internalType: "string",
-          name: "_newInfo",
-          type: "string",
-        },
+      "inputs": [
+        { "internalType": "address", "name": "_add", "type": "address" }
       ],
-      name: "alter_Exporter",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "name": "delete_Exporter",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [
-        {
-          internalType: "address",
-          name: "_newOwner",
-          type: "address",
-        },
+      "inputs": [
+        { "internalType": "address", "name": "_add", "type": "address" },
+        { "internalType": "string", "name": "_newInfo", "type": "string" }
       ],
-      name: "changeOwner",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "name": "alter_Exporter",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [],
-      name: "count_Exporters",
-      outputs: [
-        {
-          internalType: "uint16",
-          name: "",
-          type: "uint16",
-        },
+      "inputs": [
+        { "internalType": "address", "name": "_add", "type": "address" }
       ],
-      stateMutability: "view",
-      type: "function",
+      "name": "getExporterInfo",
+      "outputs": [
+        { "internalType": "string", "name": "", "type": "string" }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+
+    // Per-exporter verifier management
+    {
+      "inputs": [
+        { "internalType": "address", "name": "_verifier", "type": "address" }
+      ],
+      "name": "addVerifierForExporter",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [],
-      name: "count_hashes",
-      outputs: [
-        {
-          internalType: "uint16",
-          name: "",
-          type: "uint16",
-        },
+      "inputs": [
+        { "internalType": "address", "name": "_verifier", "type": "address" }
       ],
-      stateMutability: "view",
-      type: "function",
+      "name": "removeVerifierForExporter",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [
-        {
-          internalType: "bytes32",
-          name: "_hash",
-          type: "bytes32",
-        },
+      "inputs": [
+        { "internalType": "address", "name": "exporter", "type": "address" },
+        { "internalType": "address", "name": "verifier", "type": "address" }
       ],
-      name: "deleteHash",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "name": "isAuthorizedVerifier",
+      "outputs": [
+        { "internalType": "bool", "name": "", "type": "bool" }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+
+    // Document upload & multi-signature verification
+    {
+      "inputs": [
+        { "internalType": "bytes32", "name": "hash", "type": "bytes32" },
+        { "internalType": "string", "name": "_ipfs", "type": "string" }
+      ],
+      "name": "addDocHash",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [],
+      "name": "getAllExporters",
+      "outputs": [
         {
-          internalType: "address",
-          name: "_add",
-          type: "address",
-        },
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
       ],
-      name: "delete_Exporter",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
-        {
-          internalType: "bytes32",
-          name: "_hash",
-          type: "bytes32",
-        },
+      "inputs": [
+        { "internalType": "bytes32", "name": "hash", "type": "bytes32" }
       ],
-      name: "findDocHash",
-      outputs: [
-        {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
-        {
-          internalType: "string",
-          name: "",
-          type: "string",
-        },
-        {
-          internalType: "string",
-          name: "",
-          type: "string",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
+      "name": "confirmDocHash",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [
-        {
-          internalType: "address",
-          name: "_add",
-          type: "address",
-        },
+      "inputs": [
+        { "internalType": "bytes32", "name": "_hash", "type": "bytes32" }
       ],
-      name: "getExporterInfo",
-      outputs: [
-        {
-          internalType: "string",
-          name: "",
-          type: "string",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
+      "name": "deleteHash",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [],
-      name: "owner",
-      outputs: [
-        {
-          internalType: "address",
-          name: "",
-          type: "address",
-        },
+      "anonymous": false,
+      "inputs": [
+        { "indexed": true, "internalType": "address", "name": "_exporter", "type": "address" },
+        { "indexed": true, "internalType": "bytes32", "name": "_docHash", "type": "bytes32" },
+        { "indexed": false, "internalType": "string", "name": "_ipfsHash", "type": "string" }
       ],
-      stateMutability: "view",
-      type: "function",
+      "name": "addHash",
+      "type": "event"
     },
-  ],
+
+    {
+      "anonymous": false,
+      "inputs": [
+        { "indexed": true, "internalType": "bytes32", "name": "docHash", "type": "bytes32" },
+        { "indexed": true, "internalType": "address", "name": "verifier", "type": "address" }
+      ],
+      "name": "DocDenied",
+      "type": "event"
+    },
+    // Extended findDocHash to return multi-sig details
+    {
+      "inputs": [
+        { "internalType": "bytes32", "name": "hash", "type": "bytes32" }
+      ],
+      "name": "denyDocHash",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "bytes32", "name": "_hash", "type": "bytes32" }
+      ],
+      "name": "findDocHash",
+      "outputs": [
+        { "internalType": "bytes32", "name": "doc_Hash", "type": "bytes32" },
+        { "internalType": "uint256", "name": "blockNo", "type": "uint256" },
+        { "internalType": "uint256", "name": "timeStamp", "type": "uint256" },
+        { "internalType": "string", "name": "exporterInfo", "type": "string" },
+        { "internalType": "string", "name": "ipfsHash", "type": "string" },
+        { "internalType": "address", "name": "docExporter", "type": "address" },
+        { "internalType": "uint256", "name": "confirmations", "type": "uint256" },
+        { "internalType": "bool", "name": "isVerified", "type": "bool" },
+        { "internalType": "bool", "name": "isDenied", "type": "bool" }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
 };
 //login
 async function connect() {
@@ -235,7 +462,7 @@ async function connect() {
       console.log(selectedAccount);
       window.localStorage.setItem("userAddress", window.userAddress);
       window.location.reload();
-    } catch (error) {}
+    } catch (error) { }
   } else {
     $("#upload_file_button").attr("disabled", true);
     $("#doc-file").attr("disabled", true);
@@ -244,8 +471,34 @@ async function connect() {
   }
 }
 
+async function createAdmin(newAdminAddress) {
+  // Get the current admin (owner) from the contract
+  const currentOwner = await window.contract.methods.owner().call();
+  if (window.userAddress.toLowerCase() !== currentOwner.toLowerCase()) {
+    $("#note").html("<h5 class='text-danger'>Only current admin can assign a new admin.</h5>");
+    return;
+  }
+  try {
+    await window.contract.methods.changeOwner(newAdminAddress)
+      .send({ from: window.userAddress })
+      .on("transactionHash", (hash) => {
+        $("#note").html("<h5 class='text-info'>Admin update transaction sent. Waiting for confirmation...</h5>");
+      })
+      .on("receipt", (receipt) => {
+        $("#note").html("<h5 class='text-success'>Admin updated successfully!</h5>");
+      })
+      .on("error", (error) => {
+        $("#note").html(`<h5 class='text-danger'>${error.message}</h5>`);
+      });
+  } catch (error) {
+    $("#note").html(`<h5 class='text-danger'>${error.message}</h5>`);
+  }
+}
+
+
+
 window.onload = async () => {
-  if(window.location.href.indexOf("verify.html") > -1){
+  if (window.location.href.indexOf("verify.html") > -1) {
     $("#loader").hide();
     $(".loader-wraper").fadeOut("slow");
 
@@ -262,6 +515,7 @@ window.onload = async () => {
 
   window.userAddress = window.localStorage.getItem("userAddress");
 
+
   if (window.ethereum) {
     //gere we need MetaMask to read and write to our Contract
     window.web3 = new Web3(window.ethereum);
@@ -269,6 +523,58 @@ window.onload = async () => {
       window.CONTRACT.abi,
       window.CONTRACT.address
     );
+    // If on the admin panel, check if the user is the admin (contract owner)
+    if (window.location.href.indexOf("admin.html") > -1) {
+      const currentOwner = await window.contract.methods.owner().call();
+      if (window.userAddress.toLowerCase() !== currentOwner.toLowerCase()) {
+        document.body.innerHTML = `
+            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+              <h1>Unauthorized Access</h1>
+              <button class="btn btn-primary mt-3" onclick="connect()">Login</button>
+            </div>`;
+        return;
+      } else {
+        // Admin is logged in: load admin functionalities such as counters.
+        await getCounters();
+      }
+    }
+
+    // If on approve page, check if user is admin or verifier
+    if (window.location.href.indexOf("approve.html") > -1) {
+      // Make sure user is logged in
+      if (!window.userAddress || window.userAddress.length < 10) {
+        document.body.innerHTML = `
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+          <h1>Please connect your wallet</h1>
+          <button class="btn btn-primary mt-3" onclick="connect()">Login</button>
+        </div>`;
+        return;
+      }
+
+      // 1. Check if user is the contract owner
+      const currentOwner = await window.contract.methods.owner().call();
+      if (window.userAddress.toLowerCase() === currentOwner.toLowerCase()) {
+        // user is admin => allow
+        // loadPendingDocuments() or do nothing here
+      } else {
+        // 2. If not admin => check if user is a verifier for at least one exporter
+        const isVerifier = await isVerifierForAny(window.userAddress);
+        if (!isVerifier) {
+          // unauthorized
+          document.body.innerHTML = `
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+            <h1>Unauthorized Access</h1>
+            <button class="btn btn-primary mt-3" onclick="connect()">Login</button>
+          </div>`;
+          return;
+        }
+      }
+
+      // If we get here, user is admin or a verifier => proceed
+      // e.g. loadPendingDocuments();
+    }
+
+
     //checking if user loged in
     if (window.userAddress.length > 10) {
       // let isLocked =await window.ethereum._metamask.isUnlocked();
@@ -277,11 +583,10 @@ window.onload = async () => {
       $("#loginButton").hide();
       $("#userAddress")
         .html(`<i class="fa-solid fa-address-card mx-2 text-primary"></i>${truncateAddress(
-        window.userAddress
-      )}
-       <a class="text-info" href="${window.CONTRACT.explore}/address/${
-        window.userAddress
-      }" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-square-arrow-up-right text-warning"></i></a>  
+          window.userAddress
+        )}
+       <a class="text-info" href="${window.CONTRACT.explore}/address/${window.userAddress
+          }" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-square-arrow-up-right text-warning"></i></a>  
        </a>`);
 
       //if admin is viewed then show the doc,exporter counters
@@ -317,7 +622,30 @@ window.onload = async () => {
     // alert("Please download metamask extension first.\nhttps://metamask.io/download/");
     // window.location = "https://metamask.io/download/"
   }
+
+
+
 };
+
+///new function to get the exporter info
+async function isVerifierForAny(userAddr) {
+  // 1. Gather all exporter addresses
+  const exporters = await getAllExporters();
+
+  // 2. For each exporter, call isAuthorizedVerifier(exporter, userAddr)
+  for (let exp of exporters) {
+    const authorized = await window.contract.methods.isAuthorizedVerifier(exp, userAddr).call();
+    if (authorized) {
+      return true; // Found at least one exporter for which userAddr is a verifier
+    }
+  }
+  return false; // Not a verifier for any
+}
+
+async function getAllExporters() {
+  return await window.contract.methods.getAllExporters().call();
+}
+
 
 async function verify_Hash() {
   //Show the loading
@@ -381,7 +709,7 @@ async function get_Sha3() {
 }
 
 function print_verification_info(result, is_verified) {
-  //Default Image for not Verified Docunets
+  //Default Image for not Verified Documents
   document.getElementById("student-document").src = "./files/notvalid.svg";
   $("#loader").hide();
   // when document not verfied
@@ -411,8 +739,8 @@ function print_verification_info(result, is_verified) {
     $("#blockNumber").show();
 
     var t = new Date(1970, 0, 1);
-    t.setSeconds(result[1]);
-    console.log(result[1]);
+    t.setSeconds(result[2]);
+    console.log(result[2]);
     t.setHours(t.getHours() + 3);
     // hide loader
     $("#loader").hide();
@@ -426,7 +754,7 @@ function print_verification_info(result, is_verified) {
       )}`
     );
     $("#college-name").html(
-      `<span class="text-info"><i class="fa-solid fa-graduation-cap"></i></span> ${result[2]}`
+      `<span class="text-info"><i class="fa-solid fa-graduation-cap"></i></span> ${result[3]}`
     );
     $("#contract-address").html(
       `<span class="text-info"><i class="fa-solid fa-file-contract"></i> </span>${truncateAddress(
@@ -437,16 +765,28 @@ function print_verification_info(result, is_verified) {
       `<span class="text-info"><i class="fa-solid fa-clock"></i> </span>${t}`
     );
     $("#blockNumber").html(
-      `<span class="text-info"><i class="fa-solid fa-cube"></i></span> ${result[0]}`
+      `<span class="text-info"><i class="fa-solid fa-cube"></i></span> ${result[1]}`
     );
-    document.getElementById(
-      "student-document"
-    ).src = `http://127.0.0.1:8080/ipfs/${result[3]}`;
-    document.getElementById("download-document").href =
-      document.getElementById("student-document").src;
+    displayDocument(result);
+    document.getElementById("student-document").src = `http://127.0.0.1:8080/ipfs/${result[4]}`;
+    document.getElementById("download-document").href = document.getElementById("student-document").src;
     $(".transaction-status").show();
   }
 }
+
+function displayDocument(result) {
+  // Suppose the IPFS hash is result[4] in your new contract
+  const ipfsHash = result[4];
+  if (ipfsHash && ipfsHash.trim() !== "") {
+    const ipfsUrl = "http://127.0.0.1:8080/ipfs/" + ipfsHash;
+    // For an <object>, use the .data property
+    document.getElementById("student-document").data = ipfsUrl;
+    console.log("Document object data set to:", ipfsUrl);
+  } else {
+    console.error("No valid IPFS hash found in result[4].");
+  }
+}
+
 
 function hide_txInfo() {
   $(".transaction-status").addClass("d-none");
@@ -460,8 +800,8 @@ async function get_ethBalance() {
     if (err === null) {
       $("#userBalance").html(
         "<i class='fa-brands fa-gg-circle mx-2 text-danger'></i>" +
-          web3.utils.fromWei(balance).substr(0, 6) +
-          ""
+        web3.utils.fromWei(balance).substr(0, 6) +
+        ""
       );
     } else $("#userBalance").html("n/a");
   });
@@ -476,9 +816,9 @@ if (window.ethereum) {
 function printUploadInfo(result) {
   $("#transaction-hash").html(
     `<a target="_blank" title="View Transaction at Ether Scan" href="${window.CONTRACT.explore}/tx/` +
-      result.transactionHash +
-      '"+><i class="fa fa-check-circle font-size-2 mx-1 text-white mx-1"></i></a>' +
-      truncateAddress(result.transactionHash)
+    result.transactionHash +
+    '"+><i class="fa fa-check-circle font-size-2 mx-1 text-white mx-1"></i></a>' +
+    truncateAddress(result.transactionHash)
   );
   $("#file-hash").html(
     `<i class="fa-solid fa-hashtag mx-1"></i> ${truncateAddress(
@@ -495,9 +835,7 @@ function printUploadInfo(result) {
     `<i class="fa-solid fa-link mx-1"></i>${result.blockNumber}`
   );
   $("#blockHash").html(
-    `<i class="fa-solid fa-shield mx-1"></i> ${truncateAddress(
-      result.blockHash
-    )}`
+    `<i class="fa-solid fa-shield mx-1"></i> ${truncateAddress(result.blockHash)}`
   );
   $("#to-netowrk").html(
     `<i class="fa-solid fa-chart-network"></i> ${window.chainID}`
@@ -597,7 +935,7 @@ async function sendHash() {
         generateQRCode();
       })
 
-      .on("confirmation", function (confirmationNr) {})
+      .on("confirmation", function (confirmationNr) { })
       .on("error", function (error) {
         console.log(error.message);
         $("#note").html(`<h5 class="text-center">${error.message} 😏</h5>`);
@@ -694,7 +1032,7 @@ async function get_ChainID() {
       window.chainID = "Kovan Test Network";
       break;
     case 80002:
-      window.chainID = "Polygon Amoy Testnet"; 
+      window.chainID = "Polygon Amoy Testnet";
       break;
     case 11155111:
       window.chainID = "Sepolia";
@@ -800,7 +1138,7 @@ async function addExporter() {
           );
         })
 
-        .on("confirmation", function (confirmationNr) {})
+        .on("confirmation", function (confirmationNr) { })
         .on("error", function (error) {
           console.log(error.message);
           $("#note").html(`<h5 class="text-center">${error.message}</h5>`);
@@ -887,7 +1225,7 @@ async function editExporter() {
           );
         })
 
-        .on("confirmation", function (confirmationNr) {})
+        .on("confirmation", function (confirmationNr) { })
         .on("error", function (error) {
           console.log(error.message);
           $("#note").html(`<h5 class="text-center">${error.message} 👍</h5>`);
@@ -976,7 +1314,7 @@ function generateQRCode() {
     correctLevel: QRCode.CorrectLevel.H,
   });
   if (!window.hashedfile) return;
-  let url = `${window.location.host}/verify.html?hash=${window.hashedfile}`;
+  let url = `${window.location.protocol}//${window.location.host}verify.html?hash=${window.hashedfile}`;
   qrcode.makeCode(url);
   document.getElementById("download-link").download =
     document.getElementById("doc-file").files[0].name;
@@ -996,57 +1334,198 @@ function generateQRCode() {
 // cuz the pastEvents returns transactions in last 999 block
 async function listen() {
   console.log("started...");
-  if (window.location.pathname != "/upload.html") return;
+  if (window.location.pathname !== "/upload.html") return;
+
   document.querySelector(".loading-tx").classList.remove("d-none");
+  // Reinitialize the contract if needed
   window.web3 = new Web3(window.ethereum);
   window.contract = new window.web3.eth.Contract(
     window.CONTRACT.abi,
     window.CONTRACT.address
   );
 
+  // Fetch all events from the beginning
   await window.contract.getPastEvents(
     "addHash",
     {
       filter: {
-        _exporter: window.userAddress, //Only get the documents uploaded by current Exporter
+        _exporter: window.userAddress, // Only documents from this exporter
       },
-      fromBlock: (await window.web3.eth.getBlockNumber()) - 999,
+      fromBlock: 0,
       toBlock: "latest",
     },
     function (error, events) {
-      printTransactions(events);
-      console.log(events);
+      document.querySelector(".loading-tx").classList.add("d-none");
+      if (error) {
+        console.error("Error fetching events:", error);
+      } else {
+        printTransactions(events);
+      }
     }
   );
 }
 
-//If there is past tx then show them
-function printTransactions(data) {
-  document.querySelector(".transactions").innerHTML = "";
-  document.querySelector(".loading-tx").classList.add("d-none");
-  if (!data.length) {
-    $("#recent-header").hide();
+function printTransactions(events) {
+  // If you had been clearing the .transactions container, do it once at the top
+  // document.querySelector(".transactions").innerHTML = ""; // optional
+
+  if (!events.length) {
+    document.getElementById("recent-header").style.display = "none";
     return;
   }
-  const main = document.querySelector(".transactions");
-  for (let i = 0; i < data.length; i++) {
-    const a = document.createElement("a");
-    a.href = `${window.CONTRACT.explore}` + "/tx/" + data[i].transactionHash;
-    a.setAttribute("target", "_blank");
-    a.className =
-      "col-lg-3 col-md-4 col-sm-5 m-2  bg-dark text-light rounded position-relative card";
-    a.style = "overflow:hidden;";
-    const image = document.createElement("object");
-    image.style = "width:100%;height: 100%;";
+  document.getElementById("recent-header").style.display = "block";
 
-    image.data = `http://127.0.0.1:8080/ipfs/${data[i].returnValues[1]}`;
-    const num = document.createElement("h1");
-    num.append(document.createTextNode(i + 1));
-    a.appendChild(image);
-    num.style =
-      "position:absolute; left:4px; bottom: -20px;font-size:4rem; color: rgba(20, 63, 74, 0.35);";
-    a.appendChild(num);
-    main.prepend(a);
+  const main = document.querySelector(".transactions");
+
+  events.forEach((evt, i) => {
+    const txHash = evt.transactionHash;
+    // from your addHash event => _exporter, _docHash, _ipfsHash
+    const ipfsHash = evt.returnValues._ipfsHash; 
+    const docHash = evt.returnValues._docHash;    // if you want to display docHash as well
+
+    // Avoid duplicates if you want
+    if (document.querySelector(`[data-txhash="${txHash}"]`)) {
+      return;
+    }
+
+    // --- The main card container (a <div>, not <a>) ---
+    const card = document.createElement("div");
+    card.className = "col-lg-3 col-md-4 col-sm-5 m-2 bg-dark text-light rounded position-relative card";
+    card.style.overflow = "hidden";
+    // so we can identify duplicates
+    card.setAttribute("data-txhash", txHash);
+
+    // 1) Show the IPFS file
+    const filePreview = document.createElement("object");
+    filePreview.style = "width: 100%; height: 250px;"; 
+    filePreview.data = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
+    // If you prefer <img> for images only, do:
+    // const filePreview = document.createElement("img");
+    // filePreview.src = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
+    // filePreview.style = "width: 100%; height: 250px; object-fit: cover;";
+
+    card.appendChild(filePreview);
+
+
+
+    // 3) Create an anchor to Etherscan
+    const etherscanLink = document.createElement("a");
+    etherscanLink.href = `${window.CONTRACT.explore}/tx/${txHash}`;
+    etherscanLink.target = "_blank";
+    etherscanLink.className = "btn btn-secondary w-100 mt-2";
+    etherscanLink.textContent = "View on Etherscan";
+
+    // Optionally show docHash as well
+    // etherscanLink.title = `TxHash: ${txHash}\nDocHash: ${docHash}`;
+
+    card.appendChild(etherscanLink);
+
+    // Finally, add the card to the container
+    main.prepend(card); 
+  });
+}
+
+
+
+// Load documents from the blockchain //
+
+async function loadDocuments() {
+  try {
+    // 1. Grab all past addHash events
+    const events = await window.contract.getPastEvents("addHash", {
+      fromBlock: 0,
+      toBlock: "latest"
+    });
+    console.log("Document events:", events);
+    
+    // 2. Pass them to your UI function
+    updateDocumentsUI(events);
+  } catch (error) {
+    console.error("Error loading documents:", error);
   }
-  $("#recent-header").show();
+}
+
+function updateDocumentsUI(events) {
+  const listContainer = document.getElementById("documentsList");
+  if (!listContainer) return;
+
+  listContainer.innerHTML = ""; // Clear previous items
+
+  if (events.length === 0) {
+    listContainer.innerHTML = "<p class='text-center'>No documents found.</p>";
+    return;
+  }
+
+  // For each event:
+  events.forEach((event, i) => {
+    // In your new contract, the IPFS hash is the third parameter: _ipfsHash
+    const exporter = event.returnValues._exporter;
+    const docHash = event.returnValues._docHash;      // if you need the docHash
+    const ipfsHash = event.returnValues._ipfsHash;    // the actual IPFS CID
+
+    // 1. Create a clickable card or anchor
+    const card = document.createElement("a");
+    card.href = `http://127.0.0.1:8080/ipfs/${ipfsHash}`; 
+    card.target = "_blank";
+    card.className = "col-lg-3 col-md-4 col-sm-5 m-2 bg-dark text-light rounded position-relative card";
+    card.style = "overflow:hidden;";
+
+    // 2. Create an <object> or <img> to display the IPFS file
+    // <object> is useful if you sometimes upload PDFs, <img> if always images
+    const filePreview = document.createElement("object");
+    filePreview.style.width = "100%";
+    filePreview.style.height = "100%";
+    filePreview.data = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
+    // Or a public gateway: "https://ipfs.io/ipfs/" + ipfsHash
+
+    // 3. Optionally overlay a number
+    const numberOverlay = document.createElement("h1");
+    numberOverlay.textContent = i + 1;
+    numberOverlay.style = `
+      position: absolute;
+      left: 4px;
+      bottom: -20px;
+      font-size: 4rem;
+      color: rgba(20, 63, 74, 0.35);
+    `;
+
+    // 4. Append everything
+    card.appendChild(filePreview);
+    card.appendChild(numberOverlay);
+    listContainer.prepend(card); // prepend so newest is first
+  });
+
+
+
+
+  function displayVerifiedDocument(ipfsHash) {
+    // 1. Select the container (the same .right div in your verify.html)
+    const container = document.querySelector(".right.col-lg-6");
+
+    // 2. Clear out anything that might already be there
+    container.innerHTML = "";
+
+    // 3. Create a link (a 'card') that wraps your PDF or image
+    const card = document.createElement("a");
+    // Optionally link to Etherscan or IPFS directly
+    card.href = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
+    card.target = "_blank";
+    card.className = "col-lg-3 col-md-4 col-sm-5 m-2 bg-dark text-light rounded position-relative card";
+    card.style.overflow = "hidden";
+
+    // 4. Create an <object> to display the file
+    // If it's an image, you could use <img>. If it's a PDF, <object> or <iframe> is better.
+    const fileObject = document.createElement("object");
+    fileObject.style.width = "100%";
+    fileObject.style.height = "400px";
+    fileObject.data = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
+    // If you have a public gateway, you could use https://ipfs.io/ipfs/${ipfsHash}
+
+    // 5. Append the <object> into the link/card
+    card.appendChild(fileObject);
+
+    // 6. Finally, append the card to the container
+    container.appendChild(card);
+  }
+
 }
