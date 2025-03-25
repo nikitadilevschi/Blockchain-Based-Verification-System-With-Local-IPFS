@@ -739,8 +739,8 @@ function print_verification_info(result, is_verified) {
     $("#blockNumber").show();
 
     var t = new Date(1970, 0, 1);
-    t.setSeconds(result[1]);
-    console.log(result[1]);
+    t.setSeconds(result[2]);
+    console.log(result[2]);
     t.setHours(t.getHours() + 3);
     // hide loader
     $("#loader").hide();
@@ -754,7 +754,7 @@ function print_verification_info(result, is_verified) {
       )}`
     );
     $("#college-name").html(
-      `<span class="text-info"><i class="fa-solid fa-graduation-cap"></i></span> ${result[2]}`
+      `<span class="text-info"><i class="fa-solid fa-graduation-cap"></i></span> ${result[3]}`
     );
     $("#contract-address").html(
       `<span class="text-info"><i class="fa-solid fa-file-contract"></i> </span>${truncateAddress(
@@ -765,24 +765,25 @@ function print_verification_info(result, is_verified) {
       `<span class="text-info"><i class="fa-solid fa-clock"></i> </span>${t}`
     );
     $("#blockNumber").html(
-      `<span class="text-info"><i class="fa-solid fa-cube"></i></span> ${result[0]}`
+      `<span class="text-info"><i class="fa-solid fa-cube"></i></span> ${result[1]}`
     );
-    document.getElementById("student-document").src = `http://127.0.0.1:8080/ipfs/${result[3]}`;
+    displayDocument(result);
+    document.getElementById("student-document").src = `http://127.0.0.1:8080/ipfs/${result[4]}`;
     document.getElementById("download-document").href = document.getElementById("student-document").src;
     $(".transaction-status").show();
   }
 }
 
 function displayDocument(result) {
-  // Make sure result[3] exists and is not an empty string
-  if (result[3] && result[3].trim() !== "") {
-    // Build the URL using your local gateway. If you're not running a local IPFS node,
-    // consider using a public gateway (e.g., "https://ipfs.io/ipfs/")
-    const ipfsUrl = "http://127.0.0.1:8080/ipfs/" + result[3];
-    document.getElementById("student-document").src = ipfsUrl;
-    console.log("Document image URL set to: " + ipfsUrl);
+  // Suppose the IPFS hash is result[4] in your new contract
+  const ipfsHash = result[4];
+  if (ipfsHash && ipfsHash.trim() !== "") {
+    const ipfsUrl = "http://127.0.0.1:8080/ipfs/" + ipfsHash;
+    // For an <object>, use the .data property
+    document.getElementById("student-document").data = ipfsUrl;
+    console.log("Document object data set to:", ipfsUrl);
   } else {
-    console.error("No valid IPFS hash found in result[3]");
+    console.error("No valid IPFS hash found in result[4].");
   }
 }
 
@@ -834,9 +835,7 @@ function printUploadInfo(result) {
     `<i class="fa-solid fa-link mx-1"></i>${result.blockNumber}`
   );
   $("#blockHash").html(
-    `<i class="fa-solid fa-shield mx-1"></i> ${truncateAddress(
-      result.blockHash
-    )}`
+    `<i class="fa-solid fa-shield mx-1"></i> ${truncateAddress(result.blockHash)}`
   );
   $("#to-netowrk").html(
     `<i class="fa-solid fa-chart-network"></i> ${window.chainID}`
@@ -1335,89 +1334,111 @@ function generateQRCode() {
 // cuz the pastEvents returns transactions in last 999 block
 async function listen() {
   console.log("started...");
-  if (window.location.pathname != "/upload.html") return;
+  if (window.location.pathname !== "/upload.html") return;
+
   document.querySelector(".loading-tx").classList.remove("d-none");
+  // Reinitialize the contract if needed
   window.web3 = new Web3(window.ethereum);
   window.contract = new window.web3.eth.Contract(
     window.CONTRACT.abi,
     window.CONTRACT.address
   );
 
-  // Fetch all events from the beginning to capture every uploaded document
+  // Fetch all events from the beginning
   await window.contract.getPastEvents(
     "addHash",
     {
       filter: {
-        _exporter: window.userAddress, // Only get the documents uploaded by current Exporter
+        _exporter: window.userAddress, // Only documents from this exporter
       },
-      fromBlock: 0,  // Changed to 0 to get all events
+      fromBlock: 0,
       toBlock: "latest",
     },
     function (error, events) {
+      document.querySelector(".loading-tx").classList.add("d-none");
       if (error) {
         console.error("Error fetching events:", error);
       } else {
         printTransactions(events);
-        console.log(events);
       }
     }
   );
 }
 
-// Append new transactions to the page without clearing previously added ones
-function printTransactions(data) {
-  // Removed the clear line to retain already displayed transactions
-  // document.querySelector(".transactions").innerHTML = "";
-  document.querySelector(".loading-tx").classList.add("d-none");
-  if (!data.length) {
-    $("#recent-header").hide();
+function printTransactions(events) {
+  // If you had been clearing the .transactions container, do it once at the top
+  // document.querySelector(".transactions").innerHTML = ""; // optional
+
+  if (!events.length) {
+    document.getElementById("recent-header").style.display = "none";
     return;
   }
+  document.getElementById("recent-header").style.display = "block";
+
   const main = document.querySelector(".transactions");
 
-  for (let i = 0; i < data.length; i++) {
-    const txHash = data[i].transactionHash;
-    // Prevent duplicates: Check if an element with this transactionHash is already present
+  events.forEach((evt, i) => {
+    const txHash = evt.transactionHash;
+    // from your addHash event => _exporter, _docHash, _ipfsHash
+    const ipfsHash = evt.returnValues._ipfsHash; 
+    const docHash = evt.returnValues._docHash;    // if you want to display docHash as well
+
+    // Avoid duplicates if you want
     if (document.querySelector(`[data-txhash="${txHash}"]`)) {
-      continue;
+      return;
     }
 
-    const a = document.createElement("a");
-    a.href = `${window.CONTRACT.explore}/tx/${txHash}`;
-    a.setAttribute("target", "_blank");
-    a.setAttribute("data-txhash", txHash);  // Set a unique attribute for duplicate check
-    a.className =
-      "col-lg-3 col-md-4 col-sm-5 m-2 bg-dark text-light rounded position-relative card";
-    a.style = "overflow:hidden;";
+    // --- The main card container (a <div>, not <a>) ---
+    const card = document.createElement("div");
+    card.className = "col-lg-3 col-md-4 col-sm-5 m-2 bg-dark text-light rounded position-relative card";
+    card.style.overflow = "hidden";
+    // so we can identify duplicates
+    card.setAttribute("data-txhash", txHash);
 
-    const image = document.createElement("object");
-    image.style = "width:100%; height:100%;";
-    image.data = `http://127.0.0.1:8080/ipfs/${data[i].returnValues[1]}`;
+    // 1) Show the IPFS file
+    const filePreview = document.createElement("object");
+    filePreview.style = "width: 100%; height: 250px;"; 
+    filePreview.data = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
+    // If you prefer <img> for images only, do:
+    // const filePreview = document.createElement("img");
+    // filePreview.src = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
+    // filePreview.style = "width: 100%; height: 250px; object-fit: cover;";
+
+    card.appendChild(filePreview);
 
 
 
+    // 3) Create an anchor to Etherscan
+    const etherscanLink = document.createElement("a");
+    etherscanLink.href = `${window.CONTRACT.explore}/tx/${txHash}`;
+    etherscanLink.target = "_blank";
+    etherscanLink.className = "btn btn-secondary w-100 mt-2";
+    etherscanLink.textContent = "View on Etherscan";
 
-    const num = document.createElement("h1");
-    num.append(document.createTextNode(i + 1));
-    num.style =
-      "position:absolute; left:4px; bottom:-20px; font-size:4rem; color: rgba(20, 63, 74, 0);";
-    a.appendChild(image);
-    a.appendChild(num);
-    main.prepend(a);  // Using prepend to show newest first
-  }
-  $("#recent-header").show();
+    // Optionally show docHash as well
+    // etherscanLink.title = `TxHash: ${txHash}\nDocHash: ${docHash}`;
+
+    card.appendChild(etherscanLink);
+
+    // Finally, add the card to the container
+    main.prepend(card); 
+  });
 }
+
 
 
 // Load documents from the blockchain //
 
 async function loadDocuments() {
   try {
+    // 1. Grab all past addHash events
     const events = await window.contract.getPastEvents("addHash", {
       fromBlock: 0,
       toBlock: "latest"
     });
     console.log("Document events:", events);
+    
+    // 2. Pass them to your UI function
     updateDocumentsUI(events);
   } catch (error) {
     console.error("Error loading documents:", error);
@@ -1427,37 +1448,54 @@ async function loadDocuments() {
 function updateDocumentsUI(events) {
   const listContainer = document.getElementById("documentsList");
   if (!listContainer) return;
+
   listContainer.innerHTML = ""; // Clear previous items
+
   if (events.length === 0) {
     listContainer.innerHTML = "<p class='text-center'>No documents found.</p>";
     return;
   }
+
+  // For each event:
   events.forEach((event, i) => {
+    // In your new contract, the IPFS hash is the third parameter: _ipfsHash
     const exporter = event.returnValues._exporter;
-    const ipfsHash = event.returnValues._ipfsHash;
-    // Create a clickable card element
+    const docHash = event.returnValues._docHash;      // if you need the docHash
+    const ipfsHash = event.returnValues._ipfsHash;    // the actual IPFS CID
+
+    // 1. Create a clickable card or anchor
     const card = document.createElement("a");
-    card.href = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
+    card.href = `http://127.0.0.1:8080/ipfs/${ipfsHash}`; 
     card.target = "_blank";
     card.className = "col-lg-3 col-md-4 col-sm-5 m-2 bg-dark text-light rounded position-relative card";
     card.style = "overflow:hidden;";
 
-    // Create an element to load the image (or other content)
-    const image = document.createElement("object");
-    image.style = "width:100%; height:100%;";
-    // Use your IPFS gateway URL; here we use ipfs.io
-    image.data = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
+    // 2. Create an <object> or <img> to display the IPFS file
+    // <object> is useful if you sometimes upload PDFs, <img> if always images
+    const filePreview = document.createElement("object");
+    filePreview.style.width = "100%";
+    filePreview.style.height = "100%";
+    filePreview.data = `http://127.0.0.1:8080/ipfs/${ipfsHash}`;
+    // Or a public gateway: "https://ipfs.io/ipfs/" + ipfsHash
 
-    // Optionally, add a number overlay as in recent transactions display
+    // 3. Optionally overlay a number
     const numberOverlay = document.createElement("h1");
     numberOverlay.textContent = i + 1;
-    numberOverlay.style =
-      "position:absolute; left:4px; bottom:-20px; font-size:4rem; color: rgba(20,63,74,0.35);";
+    numberOverlay.style = `
+      position: absolute;
+      left: 4px;
+      bottom: -20px;
+      font-size: 4rem;
+      color: rgba(20, 63, 74, 0.35);
+    `;
 
-    card.appendChild(image);
+    // 4. Append everything
+    card.appendChild(filePreview);
     card.appendChild(numberOverlay);
-    listContainer.prepend(card);
+    listContainer.prepend(card); // prepend so newest is first
   });
+
+
 
 
   function displayVerifiedDocument(ipfsHash) {
