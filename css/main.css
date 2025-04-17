@@ -487,3 +487,12 @@ input,
   font-size: 13px;
   margin-bottom: 0;
 }
+
+#confidence {
+  color: white !important;
+  border: none !important;
+}
+#invoke-uploadfile{
+  color: white !important;
+  border: white 2px dashed !important;
+}

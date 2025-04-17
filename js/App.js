@@ -1,221 +1,8 @@
 window.CONTRACT = {
   // address: "0x635EfEDEa00d4d085Bba5cA475350E9aa8D22E44",   // Old contract 
-  address: "0x9C9bF487F8B2675C36C30CeDA95741E515FEA37E", // New contract
+  address: "0xE1d32A3079Caa71379e6b9357f23Cf6120c5Ee25", // New contract
   network: "https://sepolia.infura.io",
   explore: "https://sepolia.etherscan.io",
-
-  // Your Contract ABI
-  // abi: [
-  //   {
-  //     inputs: [],
-  //     stateMutability: "nonpayable",
-  //     type: "constructor",
-  //   },
-  //   {
-  //     anonymous: false,
-  //     inputs: [
-  //       {
-  //         indexed: true,
-  //         internalType: "address",
-  //         name: "_exporter",
-  //         type: "address",
-  //       },
-  //       {
-  //         indexed: false,
-  //         internalType: "string",
-  //         name: "_ipfsHash",
-  //         type: "string",
-  //       },
-  //     ],
-  //     name: "addHash",
-  //     type: "event",
-  //   },
-  //   {
-  //     inputs: [
-  //       {
-  //         internalType: "bytes32",
-  //         name: "hash",
-  //         type: "bytes32",
-  //       },
-  //       {
-  //         internalType: "string",
-  //         name: "_ipfs",
-  //         type: "string",
-  //       },
-  //     ],
-  //     name: "addDocHash",
-  //     outputs: [],
-  //     stateMutability: "nonpayable",
-  //     type: "function",
-  //   },
-  //   {
-  //     inputs: [
-  //       {
-  //         internalType: "address",
-  //         name: "_add",
-  //         type: "address",
-  //       },
-  //       {
-  //         internalType: "string",
-  //         name: "_info",
-  //         type: "string",
-  //       },
-  //     ],
-  //     name: "add_Exporter",
-  //     outputs: [],
-  //     stateMutability: "nonpayable",
-  //     type: "function",
-  //   },
-  //   {
-  //     inputs: [
-  //       {
-  //         internalType: "address",
-  //         name: "_add",
-  //         type: "address",
-  //       },
-  //       {
-  //         internalType: "string",
-  //         name: "_newInfo",
-  //         type: "string",
-  //       },
-  //     ],
-  //     name: "alter_Exporter",
-  //     outputs: [],
-  //     stateMutability: "nonpayable",
-  //     type: "function",
-  //   },
-  //   {
-  //     inputs: [
-  //       {
-  //         internalType: "address",
-  //         name: "_newOwner",
-  //         type: "address",
-  //       },
-  //     ],
-  //     name: "changeOwner",
-  //     outputs: [],
-  //     stateMutability: "nonpayable",
-  //     type: "function",
-  //   },
-  //   {
-  //     inputs: [],
-  //     name: "count_Exporters",
-  //     outputs: [
-  //       {
-  //         internalType: "uint16",
-  //         name: "",
-  //         type: "uint16",
-  //       },
-  //     ],
-  //     stateMutability: "view",
-  //     type: "function",
-  //   },
-  //   {
-  //     inputs: [],
-  //     name: "count_hashes",
-  //     outputs: [
-  //       {
-  //         internalType: "uint16",
-  //         name: "",
-  //         type: "uint16",
-  //       },
-  //     ],
-  //     stateMutability: "view",
-  //     type: "function",
-  //   },
-  //   {
-  //     inputs: [
-  //       {
-  //         internalType: "bytes32",
-  //         name: "_hash",
-  //         type: "bytes32",
-  //       },
-  //     ],
-  //     name: "deleteHash",
-  //     outputs: [],
-  //     stateMutability: "nonpayable",
-  //     type: "function",
-  //   },
-  //   {
-  //     inputs: [
-  //       {
-  //         internalType: "address",
-  //         name: "_add",
-  //         type: "address",
-  //       },
-  //     ],
-  //     name: "delete_Exporter",
-  //     outputs: [],
-  //     stateMutability: "nonpayable",
-  //     type: "function",
-  //   },
-  //   {
-  //     inputs: [
-  //       {
-  //         internalType: "bytes32",
-  //         name: "_hash",
-  //         type: "bytes32",
-  //       },
-  //     ],
-  //     name: "findDocHash",
-  //     outputs: [
-  //       {
-  //         internalType: "uint256",
-  //         name: "",
-  //         type: "uint256",
-  //       },
-  //       {
-  //         internalType: "uint256",
-  //         name: "",
-  //         type: "uint256",
-  //       },
-  //       {
-  //         internalType: "string",
-  //         name: "",
-  //         type: "string",
-  //       },
-  //       {
-  //         internalType: "string",
-  //         name: "",
-  //         type: "string",
-  //       },
-  //     ],
-  //     stateMutability: "view",
-  //     type: "function",
-  //   },
-  //   {
-  //     inputs: [
-  //       {
-  //         internalType: "address",
-  //         name: "_add",
-  //         type: "address",
-  //       },
-  //     ],
-  //     name: "getExporterInfo",
-  //     outputs: [
-  //       {
-  //         internalType: "string",
-  //         name: "",
-  //         type: "string",
-  //       },
-  //     ],
-  //     stateMutability: "view",
-  //     type: "function",
-  //   },
-  //   {
-  //     inputs: [],
-  //     name: "owner",
-  //     outputs: [
-  //       {
-  //         internalType: "address",
-  //         name: "",
-  //         type: "address",
-  //       },
-  //     ],
-  //     stateMutability: "view",
-  //     type: "function",
-  //   },
-  // ], 
 
   // New Contract ABI
   abi: [
@@ -965,7 +752,6 @@ async function deleteHash() {
           `<h5 class="text-info p-1 text-center">Please wait for transaction to be mined 😴</h5>`
         );
       })
-
       .on("receipt", function (receipt) {
         $("#note").html(
           `<h5 class="text-info p-1 text-center">Document Deleted 😳</h5>`
@@ -1527,5 +1313,8 @@ function updateDocumentsUI(events) {
     // 6. Finally, append the card to the container
     container.appendChild(card);
   }
+
+
+
 
 }
